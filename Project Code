@@ -1,1 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
+namespace Searches
+{
+    public partial class Form1 : Form
+    {
+        int[] items = new int[1000];
+        int rnd;
+        string arry1;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Random random = new Random();
+            for (int x = 0; x < items.Length; x++)
+            {
+                rnd = random.Next(0, 10000);
+               items[x] = rnd;
+                arry1 = arry1 + " " + items[x];
+            }
+           
+        }
+
+        public static int linearSearch(int[] items, int itemToFind)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] == itemToFind)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private void btnSequential_Click(object sender, EventArgs e)
+        {
+            int itemToFind = Convert.ToInt32(lblinput.Text);
+            int itemIndex = linearSearch(items, itemToFind);
+            if (itemIndex != -1)
+                lblinput.Text = (itemToFind + " found at " + itemIndex);
+            else
+               lblinput.Text = (itemToFind + " not found!");
+        }
+
+        private void btnBinary1_Click(object sender, EventArgs e)
+        {
+            Array.Sort(items);
+            int min = 0;
+            int max = 999;
+            int mid = (max + min)/2;
+            int tofind = Convert.ToInt32(lblinput.Text);
+            int indexa = -1;
+            while (min <= max)
+            {
+                if (tofind < items[mid])
+                {
+                    max = mid - 1;
+                    mid = (max + min) / 2;
+                }
+                if (tofind > items[mid])
+                {
+                    min = mid + 1;
+                    mid = (max + min) / 2;
+                }
+                else
+                {
+                    indexa = mid;
+                    min = max + 1;
+                }
+               
+            }
+            if (indexa > -1)
+            {
+                lblinput.Text = Convert.ToString(tofind + "was found at" + indexa);
+            }
+            else
+            {
+                lblinput.Text = Convert.ToString(tofind + "was not found");
+            }
+        }
+
+        private void btnBinary2_Click(object sender, EventArgs e)
+        {
+            Array.Sort(items);
+           int index1 = Array.BinarySearch(items, (Convert.ToInt32(lblinput.Text)));
+            if (index1 == -1)
+            {
+                lblinput.Text = lblinput.Text + " was not found";
+            }
+            else
+            {
+                lblinput.Text = lblinput.Text + " was found at " + Convert.ToString(index1);
+            }
+        }
+    }
+}
